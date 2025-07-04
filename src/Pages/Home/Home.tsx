@@ -7,11 +7,13 @@ import {
 import type { BookData } from "./AddBook";
 import BorrowModal from "./BorrowModal";
 import toast from "react-hot-toast";
+import { FaPencil } from "react-icons/fa6";
+import { FaRegTrashAlt } from "react-icons/fa";
 
 const Home = () => {
   // Pagination state
   const [page, setPage] = useState(1); // Default page is 1
-  const limit = 5; // Books per page
+  const limit = 10; // Books per page
   const { data: books, error, isLoading } = useGetBooksQuery({ page, limit });
   const navigate = useNavigate();
   const [deleteBook] = useDeleteBookMutation();
@@ -65,86 +67,80 @@ const Home = () => {
         {books?.data.map((book: BookData) => (
           <div
             key={book._id}
-            className="bg-white p-6 rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 border border-gray-200"
+            className="relative group bg-white p-6 rounded-3xl shadow-md hover:shadow-xl transition-all duration-500 border border-gray-200 "
           >
-            <div className="flex flex-col justify-between h-full">
-              {/* Title + Author */}
-              <div>
-                <h3 className="text-xl font-bold text-[#041345]">
-                  {book.title}
-                </h3>
-                <p className="text-sm text-gray-800 mb-2">by {book.author}</p>
+            {/* Dropdown menu on hover */}
+            <div className="absolute top-4 right-4 hidden group-hover:flex flex-col bg-white border border-alt-border rounded-xl p-2 shadow-md z-10">
+              <button
+                onClick={() => navigate(`/books/${book._id}`)}
+                className="flex cursor-pointer items-center gap-2 px-3 py-1 text-sm text-black hover:bg-stone-100 duration-300 "
+              >
+                <FaPencil /> Edit
+              </button>
+              <button
+                onClick={() => book._id && handleDelete(book._id)}
+                className="flex cursor-pointer items-center gap-2 px-3 py-1 text-sm text-red-600 hover:bg-stone-100 duration-300"
+              >
+                <FaRegTrashAlt /> Delete
+              </button>
+            </div>
 
-                {/* Genre Tag */}
-                <span className="inline-block bg-[#041345] text-white text-xs px-3 py-1 rounded-full mb-3">
-                  {book.genre}
+            {/* Genre Tag */}
+            <span className="inline-block bg-gray-100 text-gray-600 text-xs font-medium px-3 py-1 rounded-full mb-4">
+              {book.genre}
+            </span>
+
+            {/* Title */}
+            <h3 className="text-2xl font-bold text-black">{book.title}</h3>
+            <p className="text-gray-500 mb-5">By {book.author}</p>
+
+            {/* Details list */}
+            <div className="text-sm text-gray-800 space-y-1 mb-6">
+              <div className="flex">
+                <span className="font-semibold w-28">Available</span>
+                <span className="mr-1">:</span>
+                <span className="text-black">
+                  {book.copies > 0 ? "Yes" : "No"}
                 </span>
-
-                {/* Description */}
-                <p className="text-gray-700 text-sm mb-2">
-                  {book.description?.length > 100
-                    ? `${book.description.slice(0, 100)}...`
-                    : book.description}
-                </p>
-
-                {/* Info Grid */}
-                <div className="text-sm text-gray-700 space-y-1">
-                  <p>
-                    <span className="font-semibold">ISBN:</span> {book.isbn}
-                  </p>
-                  <p>
-                    <span className="font-semibold">Copies:</span> {book.copies}
-                  </p>
-                  <p>
-                    <span className="font-semibold">Available:</span>{" "}
-                    <span
-                      className={`font-semibold ${
-                        book.copies > 0 ? "text-green-600" : "text-red-500"
-                      }`}
-                    >
-                      {book.copies > 0 ? "Yes" : "No"}
-                    </span>
-                  </p>
-                </div>
               </div>
-
-              {/* Buttons */}
-              <div className="mt-5 flex flex-wrap gap-2 justify-between">
-                <button
-                  onClick={() => navigate(`/books/${book._id}`)}
-                  className="bg-[#041345] text-white text-sm px-4 py-2 rounded-md hover:bg-opacity-90 transition"
-                >
-                  Edit
-                </button>
-                <button
-                  onClick={() => navigate(`/details/${book._id}`)}
-                  className="bg-gray-800 text-white text-sm px-4 py-2 rounded-md hover:bg-gray-700 transition"
-                >
-                  Details
-                </button>
-                <button
-                  onClick={() => {
-                    setSelectedBookId(book._id ?? null);
-                    setSelectedBookCopies(book.copies);
-                  }}
-                  className="bg-green-600 text-white text-sm px-4 py-2 rounded-md hover:bg-green-700 transition"
-                >
-                  Borrow
-                </button>
-                <button
-                  onClick={() => book._id && handleDelete(book._id)}
-                  className="bg-red-600 text-white text-sm px-4 py-2 rounded-md hover:bg-red-700 transition"
-                >
-                  Delete
-                </button>
+              <div className="flex">
+                <span className="font-semibold w-28">Copies</span>
+                <span className="mr-1">:</span>
+                <span>{book.copies}</span>
               </div>
-
-              <div className="mt-4 text-right text-xs text-gray-500 italic">
-                Added on:{" "}
-                {book.createdAt
-                  ? new Date(book.createdAt).toLocaleDateString("en-GB")
-                  : "Unknown"}
+              <div className="flex">
+                <span className="font-semibold w-28">ISBN</span>
+                <span className="mr-1">:</span>
+                <span>{book.isbn}</span>
               </div>
+              <div className="flex">
+                <span className="font-semibold w-28">Adding Date</span>
+                <span className="mr-1">:</span>
+                <span>
+                  {book.createdAt
+                    ? new Date(book.createdAt).toLocaleDateString("en-GB")
+                    : "Unknown"}
+                </span>
+              </div>
+            </div>
+
+            {/* Footer Buttons */}
+            <div className="flex gap-3">
+              <button
+                onClick={() => navigate(`/details/${book._id}`)}
+                className="flex-1 border border-alt-border rounded-full py-2 text-black hover:text-white hover:bg-primary-blue duration-500 cursor-pointer "
+              >
+                Details
+              </button>
+              <button
+                onClick={() => {
+                  setSelectedBookId(book._id ?? null);
+                  setSelectedBookCopies(book.copies);
+                }}
+                className="flex-1 bg-[#041345] text-white rounded-full py-2 hover:bg-opacity-90 transition hover:bg-white hover:text-primary-blue border border-alt-border duration-500 cursor-pointer"
+              >
+                Borrow
+              </button>
             </div>
           </div>
         ))}
