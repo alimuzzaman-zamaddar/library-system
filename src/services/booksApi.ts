@@ -21,12 +21,17 @@ export const booksApi = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: "https://library-management-server-peach-nine.vercel.app/api/",
   }),
-  tagTypes: ["Books"], // 👈 add this
+  tagTypes: ["Books", "Borrow"], 
+
   endpoints: builder => ({
     getBooks: builder.query({
       query: () => "books",
-      providesTags: ["Books"], // 👈 this provides the tag
+      providesTags: ["Books"],
     }),
+
+
+
+
 
     getBook: builder.query<
       { success: boolean; message: string; data: BookData },
@@ -35,14 +40,22 @@ export const booksApi = createApi({
       query: id => `books/${id}`,
     }),
 
+
+
+
     addBook: builder.mutation({
       query: newBook => ({
         url: "books",
         method: "POST",
         body: newBook,
       }),
-      invalidatesTags: ["Books"], // 👈 invalidates the tag after action
+      invalidatesTags: ["Books"],
     }),
+
+
+
+
+
 
     updateBook: builder.mutation({
       query: ({ id, ...put }) => ({
@@ -50,8 +63,13 @@ export const booksApi = createApi({
         method: "PUT",
         body: put,
       }),
-      invalidatesTags: ["Books"], // 👈
+      invalidatesTags: ["Books"],
     }),
+
+
+
+
+
 
     deleteBook: builder.mutation<{ success: boolean; message: string }, string>(
       {
@@ -59,9 +77,14 @@ export const booksApi = createApi({
           url: `books/${bookId}`,
           method: "DELETE",
         }),
-        invalidatesTags: ["Books"], // 👈
+        invalidatesTags: ["Books"],
       }
     ),
+
+
+
+
+
 
     borrowBook: builder.mutation<
       { success: boolean; message: string },
@@ -72,12 +95,23 @@ export const booksApi = createApi({
         method: "POST",
         body: { book, quantity, dueDate },
       }),
-      invalidatesTags: ["Books"], // 👈 optional if borrow affects availability
+      invalidatesTags: ["Books", "Borrow"],
     }),
+
+
+
+
+
 
     getBorrowSummary: builder.query<BorrowSummaryResponse, void>({
       query: () => "borrow",
+      providesTags: ["Borrow"], 
     }),
+
+
+
+
+
   }),
 });
 
