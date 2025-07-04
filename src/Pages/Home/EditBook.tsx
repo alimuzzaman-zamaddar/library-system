@@ -5,6 +5,7 @@ import {
   useGetBookQuery,
   useUpdateBookMutation,
 } from "../../services/booksApi";
+import toast from "react-hot-toast";
 
 export interface BookData {
   title: string;
@@ -43,7 +44,9 @@ const EditBook = () => {
   const onSubmit = async (data: BookData) => {
     try {
       await updateBook({ ...data, id }).unwrap();
-      alert("Book edited successfully");
+      toast.success("Book edited successfully");
+      await refetch();
+      toast.success("Book data refreshed");
     } catch (err) {
       console.error("Failed to update book", err);
     }

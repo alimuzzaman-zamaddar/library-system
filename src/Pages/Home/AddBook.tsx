@@ -3,8 +3,8 @@ import { useAddBookMutation } from "../../services/booksApi";
 import toast from "react-hot-toast";
 
 export interface BookData {
-  _id?: string; // <- add this line
-  createdAt?: string; // <- optional but helpful
+  _id?: string; 
+  createdAt?: string;
   title: string;
   author: string;
   genre: "SCIENCE" | "FICTION" | "HISTORY" | "NON_FICTION" | "BIOGRAPHY" | "FANTASY";
