@@ -1,70 +1,74 @@
-# React + TypeScript + Vite
+# 📚 Library Management Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is the **frontend application** for a Library Management System built using **React**, **TypeScript**, **Tailwind CSS**, **RTK Query**, and **Vite**. It allows users to:
 
-Currently, two official plugins are available:
+- Add, edit, and delete books
+- View book details
+- Borrow books with a modal interface
+- Handle pagination
+- Get real-time feedback using toast notifications
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## Expanding the ESLint configuration
+## 🚀 Tech Stack
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- ⚛️ React (with Vite)
+- 🧠 TypeScript
+- 🎨 Tailwind CSS
+- 🧰 Redux Toolkit & RTK Query
+- 🔔 react-hot-toast
+- 🔄 React Hook Form
+- 🌐 Axios or Fetch (via RTK Query)
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+---
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+## 📂 Project Structure
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+src/
+│
+├── components/ # Reusable UI components (buttons, modals, inputs)
+├── Pages/ # Page components (AddBook, EditBook, Home, BookDetails)
+├── services/ # RTK Query API slice (booksApi.ts)
+├── router/ # React Router config (if applicable)
+├── App.tsx # Main app component
+└── main.tsx # Entry point
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+yaml
+Copy
+Edit
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+---
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-# library-system
+## ⚙️ Setup Instructions
+
+1. **Clone the repository:**
+
+```bash
+git clone https://github.com/your-username/library-frontend.git
+cd library-frontend
+Install dependencies:
+
+bash
+Copy
+Edit
+npm install
+Start development server:
+
+bash
+Copy
+Edit
+npm run dev
+Build for production:
+
+bash
+Copy
+Edit
+npm run build
+🖥️ Available Pages
+/ – Book listing (with pagination)
+
+/books/add – Add a new book
+
+/books/:id – Edit an existing book
+
+/details/:id – Book details
