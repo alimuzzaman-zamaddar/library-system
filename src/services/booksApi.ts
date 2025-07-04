@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import type { BookData } from "../Pages/Home/AddBook";
 
-// Type for each item in the borrow summary
+
 interface BorrowSummaryItem {
   totalQuantity: number;
   book: {
@@ -10,7 +10,7 @@ interface BorrowSummaryItem {
   };
 }
 
-// Full API response type
+
 interface BorrowSummaryResponse {
   success: boolean;
   message: string;
@@ -25,8 +25,8 @@ export const booksApi = createApi({
 
   endpoints: builder => ({
     getBooks: builder.query({
-      query: ({ page, limit }) => `books?page=${page}&limit=${limit}`, // Pass page and limit as query params
-      providesTags: ["Books"], // This keeps track of the borrow summary data in cache
+      query: ({ page, limit }) => `books?page=${page}&limit=${limit}`,
+      providesTags: ["Books"], 
     }),
 
     getBook: builder.query<
