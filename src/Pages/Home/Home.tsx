@@ -32,7 +32,7 @@ const Home = () => {
   };
 
   // If books are still loading
-  if (isLoading) return <div className="text-center text-xl">Loading...</div>;
+  if (isLoading) return <div className="text-center text-xl text-black">Loading...</div>;
 
   // If error in fetching books
   if (error)

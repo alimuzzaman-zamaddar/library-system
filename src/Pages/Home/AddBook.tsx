@@ -137,11 +137,11 @@ const AddBook = () => {
             value={bookData.isbn}
             onChange={handleChange}
             className="w-full p-3 border border-gray-300 rounded-md focus:outline-[#041345]"
-            placeholder="Enter number (10-30 digits)"
+            placeholder="Enter ISBN number (10-13 digits)"
             required
-            pattern="^\d{10,30}$"
-            title="Please enter a number between 10 and 30 digits"
-            onInvalid={() => toast.error("Please enter a number between 10 and 30 digits")}
+            pattern="^\d{10,13}$"
+            title="Please enter a ISBN number between 10 and 13 digits"
+            onInvalid={() => toast.error("Please enter a ISBN number between 10 and 13 digits")}
           />
           <span className="text-xs text-gray-500">Must be unique</span>
         </div>
@@ -179,6 +179,7 @@ const AddBook = () => {
             type="checkbox"
             name="available"
             checked={bookData.available}
+            defaultChecked
             onChange={handleChange}
             className="accent-[#041345] w-5 h-5"
           />
