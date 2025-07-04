@@ -45,7 +45,6 @@ const EditBook = () => {
     try {
       await updateBook({ ...data, id }).unwrap();
       toast.success("Book edited successfully");
-      await refetch();
       toast.success("Book data refreshed");
     } catch (err) {
       console.error("Failed to update book", err);
