@@ -9,7 +9,10 @@ import BorrowModal from "./BorrowModal";
 import toast from "react-hot-toast";
 
 const Home = () => {
-  const { data: books, error, isLoading } = useGetBooksQuery({});
+  // Pagination state
+  const [page, setPage] = useState(1); // Default page is 1
+  const limit = 5; // Books per page
+  const { data: books, error, isLoading } = useGetBooksQuery({ page, limit });
   const navigate = useNavigate();
   const [deleteBook] = useDeleteBookMutation();
 
@@ -22,19 +25,35 @@ const Home = () => {
 
     try {
       const result = await deleteBook(bookId).unwrap();
-      toast.success(result.message); 
+      toast.success(result.message);
     } catch (err: any) {
       toast.error(err?.data?.message || "Failed to delete book.");
     }
   };
 
+  // If books are still loading
   if (isLoading) return <div className="text-center text-xl">Loading...</div>;
+
+  // If error in fetching books
   if (error)
     return (
       <div className="text-center text-xl text-red-500">
         Error fetching books
       </div>
     );
+
+  // Handle page change
+  const handleNext = () => {
+    if (page < books?.totalPages) {
+      setPage(page + 1); // Go to the next page
+    }
+  };
+
+  const handlePrevious = () => {
+    if (page > 1) {
+      setPage(page - 1); // Go to the previous page
+    }
+  };
 
   return (
     <div className="container mx-auto px-4 py-10 mt-20">
@@ -121,11 +140,33 @@ const Home = () => {
               </div>
 
               <div className="mt-4 text-right text-xs text-gray-500 italic">
-                Added on: {book.createdAt ? new Date(book.createdAt).toLocaleDateString("en-GB") : "Unknown"}
+                Added on:{" "}
+                {book.createdAt
+                  ? new Date(book.createdAt).toLocaleDateString("en-GB")
+                  : "Unknown"}
               </div>
             </div>
           </div>
         ))}
+      </div>
+
+      {/* Pagination Controls */}
+      <div className="mt-6 flex justify-between items-center">
+        <button
+          onClick={handlePrevious}
+          disabled={page === 1}
+          className="bg-primary-blue hover:bg-white duration-500 hover:text-primary-blue border border-alt-border text-white px-4 py-2 rounded-md disabled:opacity-50"
+        >
+          Previous
+        </button>
+        <span>{`Page ${page} of ${books?.totalPages}`}</span>
+        <button
+          onClick={handleNext}
+          disabled={page === books?.totalPages}
+          className="bg-primary-blue hover:bg-white duration-500 hover:text-primary-blue border border-alt-border text-white px-4 py-2 rounded-md disabled:opacity-50"
+        >
+          Next
+        </button>
       </div>
 
       {/* Borrow Modal */}

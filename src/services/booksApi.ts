@@ -21,17 +21,13 @@ export const booksApi = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: "https://library-management-server-peach-nine.vercel.app/api/",
   }),
-  tagTypes: ["Books", "Borrow"], 
+  tagTypes: ["Books", "Borrow"],
 
   endpoints: builder => ({
     getBooks: builder.query({
-      query: () => "books",
-      providesTags: ["Books"],
+      query: ({ page, limit }) => `books?page=${page}&limit=${limit}`, // Pass page and limit as query params
+      providesTags: ["Books"], // This keeps track of the borrow summary data in cache
     }),
-
-
-
-
 
     getBook: builder.query<
       { success: boolean; message: string; data: BookData },
@@ -39,9 +35,6 @@ export const booksApi = createApi({
     >({
       query: id => `books/${id}`,
     }),
-
-
-
 
     addBook: builder.mutation({
       query: newBook => ({
@@ -52,11 +45,6 @@ export const booksApi = createApi({
       invalidatesTags: ["Books"],
     }),
 
-
-
-
-
-
     updateBook: builder.mutation({
       query: ({ id, ...put }) => ({
         url: `books/${id}`,
@@ -65,11 +53,6 @@ export const booksApi = createApi({
       }),
       invalidatesTags: ["Books"],
     }),
-
-
-
-
-
 
     deleteBook: builder.mutation<{ success: boolean; message: string }, string>(
       {
@@ -80,11 +63,6 @@ export const booksApi = createApi({
         invalidatesTags: ["Books"],
       }
     ),
-
-
-
-
-
 
     borrowBook: builder.mutation<
       { success: boolean; message: string },
@@ -98,20 +76,10 @@ export const booksApi = createApi({
       invalidatesTags: ["Books", "Borrow"],
     }),
 
-
-
-
-
-
     getBorrowSummary: builder.query<BorrowSummaryResponse, void>({
       query: () => "borrow",
-      providesTags: ["Borrow"], 
+      providesTags: ["Borrow"],
     }),
-
-
-
-
-
   }),
 });
 
