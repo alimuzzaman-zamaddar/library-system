@@ -1,8 +1,10 @@
-import { useParams} from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
-
 import { useEffect } from "react";
-import { useGetBookQuery, useUpdateBookMutation } from "../../services/booksApi";
+import {
+  useGetBookQuery,
+  useUpdateBookMutation,
+} from "../../services/booksApi";
 
 export interface BookData {
   title: string;
@@ -16,8 +18,6 @@ export interface BookData {
 
 const EditBook = () => {
   const { id } = useParams<{ id: string }>();
-
-
   const { data: bookRes, isLoading } = useGetBookQuery(id!);
   const [updateBook] = useUpdateBookMutation();
 
@@ -25,20 +25,25 @@ const EditBook = () => {
 
   useEffect(() => {
     if (bookRes?.data) {
-      const allowedGenres = ["SCIENCE", "FICTION", "HISTORY", "ROMANCE"] as const;
-      const genre: BookData["genre"] =
-        allowedGenres.includes(bookRes.data.genre as BookData["genre"])
-          ? (bookRes.data.genre as BookData["genre"])
-          : "SCIENCE";
-      reset({ ...bookRes.data, genre }); // Book is inside data field
+      const allowedGenres = [
+        "SCIENCE",
+        "FICTION",
+        "HISTORY",
+        "ROMANCE",
+      ] as const;
+      const genre: BookData["genre"] = allowedGenres.includes(
+        bookRes.data.genre as BookData["genre"]
+      )
+        ? (bookRes.data.genre as BookData["genre"])
+        : "SCIENCE";
+      reset({ ...bookRes.data, genre });
     }
   }, [bookRes, reset]);
 
   const onSubmit = async (data: BookData) => {
     try {
       await updateBook({ ...data, id }).unwrap();
-      alert("book Edited successfully")
-      // navigate("/books"); // Redirect to book list
+      alert("Book edited successfully");
     } catch (err) {
       console.error("Failed to update book", err);
     }
@@ -48,52 +53,92 @@ const EditBook = () => {
     return <div className="text-center mt-10">Loading book...</div>;
 
   return (
-    <div className="max-w-2xl mx-auto p-6 bg-white shadow-md rounded mt-20">
-      <h2 className="text-2xl font-bold mb-4">Edit Book</h2>
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-        <input
-          {...register("title")}
-          className="w-full p-2 border rounded"
-          placeholder="Title"
-        />
-        <input
-          {...register("author")}
-          className="w-full p-2 border rounded"
-          placeholder="Author"
-        />
+    <div className="max-w-3xl mx-auto p-8 bg-white rounded-xl shadow-lg mt-20">
+      <h2 className="text-3xl font-bold text-[#041345] mb-6">Edit Book</h2>
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+        <div>
+          <label className="block text-sm font-medium text-black mb-1">
+            Title
+          </label>
+          <input
+            {...register("title")}
+            className="w-full p-3 border border-gray-300 rounded-md focus:outline-[#041345]"
+            placeholder="Enter title"
+          />
+        </div>
 
-        <select {...register("genre")} className="w-full p-2 border rounded">
-          <option value="SCIENCE">Science</option>
-          <option value="FICTION">Fiction</option>
-          <option value="HISTORY">History</option>
-          <option value="ROMANCE">Romance</option>
-        </select>
+        <div>
+          <label className="block text-sm font-medium text-black mb-1">
+            Author
+          </label>
+          <input
+            {...register("author")}
+            className="w-full p-3 border border-gray-300 rounded-md focus:outline-[#041345]"
+            placeholder="Enter author"
+          />
+        </div>
 
-        <input
-          {...register("isbn")}
-          className="w-full p-2 border rounded"
-          placeholder="ISBN"
-        />
-        <textarea
-          {...register("description")}
-          className="w-full p-2 border rounded"
-          placeholder="Description"
-        />
-        <input
-          type="number"
-          {...register("copies")}
-          className="w-full p-2 border rounded"
-          placeholder="Copies"
-        />
+        <div>
+          <label className="block text-sm font-medium text-black mb-1">
+            Genre
+          </label>
+          <select
+            {...register("genre")}
+            className="w-full p-3 border border-gray-300 rounded-md focus:outline-[#041345]"
+          >
+            <option value="SCIENCE">Science</option>
+            <option value="FICTION">Fiction</option>
+            <option value="HISTORY">History</option>
+            <option value="ROMANCE">Romance</option>
+          </select>
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-black mb-1">
+            ISBN
+          </label>
+          <input
+            {...register("isbn")}
+            className="w-full p-3 border border-gray-300 rounded-md focus:outline-[#041345]"
+            placeholder="Enter ISBN number"
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-black mb-1">
+            Description
+          </label>
+          <textarea
+            {...register("description")}
+            className="w-full p-3 border border-gray-300 rounded-md focus:outline-[#041345]"
+            placeholder="Enter short description"
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-black mb-1">
+            Copies
+          </label>
+          <input
+            type="number"
+            {...register("copies")}
+            className="w-full p-3 border border-gray-300 rounded-md focus:outline-[#041345]"
+            placeholder="Number of copies"
+          />
+        </div>
 
         <div className="flex items-center gap-2">
-          <input type="checkbox" {...register("available")} />
-          <label>Available</label>
+          <input
+            type="checkbox"
+            {...register("available")}
+            className="accent-[#041345] w-5 h-5"
+          />
+          <label className="text-black">Available</label>
         </div>
 
         <button
           type="submit"
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+          className="bg-[#041345] text-white w-full py-3 rounded-md font-semibold hover:bg-opacity-90 transition duration-200"
         >
           Update Book
         </button>
